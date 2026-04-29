@@ -610,15 +610,19 @@ function handleVoto(lecturaId, estrellas) {
 }
 
 async function guardarVotoSheet(lecturaId, estrellas) {
-  // Append a Google Sheet via fetch (requiere que el sheet esté configurado)
   const fecha = new Date().toLocaleDateString('es-CL');
-  const row = [lecturaId, userName, estrellas, fecha];
+  const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSenjC1C4ElIF0MdVk6WyyEczteT8-UiGtjrhCVAEt8sgecrLg/formResponse';
+  const params = new URLSearchParams();
+  params.append('entry.2008192860', lecturaId);
+  params.append('entry.53259828', userName);
+  params.append('entry.793687496', estrellas);
+  params.append('entry.339078922', fecha);
   try {
-    await fetch(`https://script.google.com/macros/s/AKfycbykUdsWpPguUtJmvFY4OueDcdP0fIHGmcu1IF7S0rk8XKbX1BuR684pVgW5VWOzQvQm3Q/exec`, {
+    await fetch(formUrl, {
       method: 'POST',
       mode: 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ lectura_id: lecturaId, usuario: userName, estrellas, fecha })
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: params.toString()
     });
   } catch(e) {}
 }
