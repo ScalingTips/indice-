@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin · Club de Lectura</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0B1F4A; --blue: #185FA5; --blue-bg: #EBF3FB;
+    --verde: #1A7A4A; --verde-bg: #E5F5ED;
+    --cafe: #6B4423; --cafe-bg: #F5EDE5;
+    --border: rgba(0,0,0,0.09); --muted: #6B7280; --text: #1A1A2E;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: #F7F8FA; color: var(--text); min-height: 100vh; -webkit-font-smoothing: antialiased; }
+
+  .header { background: var(--navy); padding: 18px 28px; display: flex; align-items: center; justify-content: space-between; }
+  .header-left { display: flex; align-items: center; gap: 12px; }
+  .header-logo { width: 32px; height: 32px; background: var(--blue); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+  .header-title { font-family: 'Nunito Sans', sans-serif; font-weight: 700; font-size: 16px; color: white; }
+  .header-sub { font-size: 11px; color: rgba(255,255,255,0.4); font-family: 'DM Mono', monospace; text-transform: uppercase; letter-spacing: 0.06em; }
+
+  .body { padding: 28px 24px 60px; max-width: 640px; margin: 0 auto; }
+
+  .eyebrow { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--blue); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 16px; }
+
+  .book-row {
+    background: #fff; border: 1px solid var(--border); border-radius: 12px;
+    padding: 14px 18px; margin-bottom: 8px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .row-num { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); min-width: 24px; }
+  .row-info { flex: 1; min-width: 0; }
+  .row-title { font-weight: 600; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .row-autor { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+  .estado-select {
+    padding: 7px 30px 7px 12px; border-radius: 8px;
+    font-size: 13px; font-family: 'DM Sans', sans-serif; font-weight: 500;
+    border: 1.5px solid var(--border); cursor: pointer; outline: none;
+    min-width: 136px; appearance: none; -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 10px center;
+    transition: border-color 0.15s;
+  }
+  .estado-select.s-leido   { background-color: var(--verde-bg); color: var(--verde); border-color: #B3D9C4; }
+  .estado-select.s-leyendo { background-color: var(--blue-bg);  color: var(--blue);  border-color: #B8D4EE; }
+  .estado-select.s-porleer { background-color: var(--cafe-bg);  color: var(--cafe);  border-color: #D5B99A; }
+
+  .download-btn {
+    margin-top: 24px; width: 100%; padding: 15px;
+    background: var(--navy); color: white; border: none; border-radius: 12px;
+    font-size: 15px; font-weight: 700; font-family: 'Nunito Sans', sans-serif;
+    cursor: pointer; transition: opacity 0.15s;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .download-btn:hover { opacity: 0.88; }
+
+  .instruccion {
+    margin-top: 14px; padding: 14px 16px;
+    background: var(--blue-bg); border-radius: 10px;
+    font-size: 13px; color: var(--blue); line-height: 1.6;
+    display: flex; gap: 10px; align-items: flex-start;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <div class="header-logo">📚</div>
+    <div>
+      <div class="header-title">Club de Lectura</div>
+      <div class="header-sub">Admin · estados</div>
+    </div>
+  </div>
+</div>
+
+<div class="body">
+  <div class="eyebrow">Cambia el estado de cada lectura</div>
+  <div id="books-list"></div>
+
+  <button class="download-btn" onclick="descargar()">
+    ⬇️ Descargar club.html actualizado
+  </button>
+
+  <div class="instruccion">
+    💡 Descarga el archivo y súbelo a GitHub reemplazando el <strong>club.html</strong> anterior. Netlify lo despliega solo.
+  </div>
+</div>
+
+<script>
+const libros = [
+  { id: 1,  nombre: 'What is Strategy',                             autor: 'Michael Porter, HBR', estado: 'Leído' },
+  { id: 2,  nombre: "Building Your Company's Vision",              autor: 'Jim Collins, HBR',    estado: 'Leído' },
+  { id: 3,  nombre: 'Empieza por el por qué',                      autor: 'Simon Sinek',         estado: 'Leído' },
+  { id: 4,  nombre: 'Valores fundamentales',                        autor: 'Forbes',              estado: 'Leído' },
+  { id: 5,  nombre: 'Good to Great',                                autor: 'Jim Collins',         estado: 'Leyendo' },
+  { id: 6,  nombre: 'Jugar a Ganar',                                autor: 'AG Lafley',           estado: 'Por leer' },
+  { id: 7,  nombre: 'Uncommon Service',                             autor: 'Frances Frei',        estado: 'Por leer' },
+  { id: 8,  nombre: 'The Advantage',                                autor: 'Patrick Lencioni',    estado: 'Por leer' },
+  { id: 9,  nombre: '5 Disfunciones de un Equipo',                 autor: 'Patrick Lencioni',    estado: 'Por leer' },
+  { id: 10, nombre: 'Multipliers',                                  autor: 'Liz Wiseman',         estado: 'Por leer' },
+  { id: 11, nombre: 'Turning the Flywheel',                         autor: 'Jim Collins',         estado: 'Por leer' },
+];
+
+function claseSelect(estado) {
+  if (estado === 'Leído')   return 's-leido';
+  if (estado === 'Leyendo') return 's-leyendo';
+  return 's-porleer';
+}
+
+function getEstado(id) {
+  return document.getElementById('sel-' + id).value;
+}
+
+function onSelectChange(id, sel) {
+  sel.className = 'estado-select ' + claseSelect(sel.value);
+}
+
+// Render
+document.getElementById('books-list').innerHTML = libros.map(l => `
+  <div class="book-row">
+    <span class="row-num">#${l.id}</span>
+    <div class="row-info">
+      <div class="row-title">${l.nombre}</div>
+      <div class="row-autor">${l.autor}</div>
+    </div>
+    <select class="estado-select ${claseSelect(l.estado)}" id="sel-${l.id}" onchange="onSelectChange(${l.id}, this)">
+      <option value="Leído"    ${l.estado === 'Leído'    ? 'selected' : ''}>✅ Leído</option>
+      <option value="Leyendo"  ${l.estado === 'Leyendo'  ? 'selected' : ''}>📖 Leyendo</option>
+      <option value="Por leer" ${l.estado === 'Por leer' ? 'selected' : ''}>⏳ Por leer</option>
+    </select>
+  </div>
+`).join('');
+
+// ── GENERAR Y DESCARGAR club.html ──
+function descargar() {
+  const estados = libros.map(l => ({ ...l, estado: getEstado(l.id) }));
+  const html = generarClubHTML(estados);
+  const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'club.html';
+  a.click();
+}
+
+function generarClubHTML(libros) {
+  const filas = libros.map(l => {
+    const pdfs = {
+      1: 'https://scaling10x.sharepoint.com/:b:/s/Scaling/IQC6nGP29QNQT5Y7Nj3vFb91AS1ZLPbkPUJriIHvh7T-LQ8?e=SESmlf',
+      2: 'https://scaling10x.sharepoint.com/:b:/s/Scaling/IQAN6G_kwykKQq_afP2PixYaAU4vjtK4CF7VZu2kvZcj0jw?e=6Vffgt',
+      3: 'https://scaling10x.sharepoint.com/:b:/s/Scaling/IQB8M3V9ufMeRqGRQ7smtmAmATIr5jPjRxxgTHCmDwFWAac?e=x5zWn0',
+      4: 'https://scaling10x.sharepoint.com/:b:/s/Scaling/IQBkdsCjKWsXTZMtYq5x6Go9AcQbJmuSMmpfaxbtCQl_fEI?e=e4B6Kg',
+    };
+    const datos = {
+      1:  { sesion:1, decision:'Estrategia', nombre:'What is Strategy',                                    autor:'Michael Porter, HBR', resumen:'Estrategia bajada a actividades: fundamental para actividades diferenciadoras.',                                               fecha:'18 de marzo' },
+      2:  { sesion:2, decision:'Estrategia', nombre:"Building Your Company's Vision",                     autor:'Jim Collins, HBR',    resumen:'Cómo construir valores y BHAG.',                                                                                              fecha:'28 de abril' },
+      3:  { sesion:2, decision:'Estrategia', nombre:'Empieza por el por qué',                             autor:'Simon Sinek',         resumen:'Propósito.',                                                                                                                 fecha:'28 de abril' },
+      4:  { sesion:2, decision:'Estrategia', nombre:'Valores fundamentales',                               autor:'Forbes',              resumen:'Importancia valores fundamentales de una empresa.',                                                                          fecha:'28 de abril' },
+      5:  { sesion:3, decision:'Estrategia', nombre:'Good to Great',                                       autor:'Jim Collins',         resumen:'13 ejemplos y muchas herramientas como Hedgehog concept y BHAG.',                                                            fecha:'26 de mayo' },
+      6:  { sesion:4, decision:'Estrategia', nombre:'Jugar a Ganar: Cómo funciona realmente la estrategia',autor:'AG Lafley',           resumen:'Estrategia para grandes corporaciones con unidades de negocios.',                                                           fecha:'30 de junio' },
+      7:  { sesion:5, decision:'Estrategia', nombre:'Uncommon Service',                                    autor:'Frances Frei',        resumen:'Fundamental para Estrategia en una frase y promesa de marca: no se puede ser bueno en todo.',                                fecha:'28 de julio' },
+      8:  { sesion:6, decision:'Personas',   nombre:'The Advantage',                                       autor:'Patrick Lencioni',    resumen:'Explica cohesión de equipo y el rol de la estrategia (6 preguntas).',                                                        fecha:'25 de agosto' },
+      9:  { sesion:7, decision:'Personas',   nombre:'5 Disfunciones de un Equipo',                        autor:'Patrick Lencioni',    resumen:'Clave para la efectividad de equipo.',                                                                                        fecha:'29 de septiembre' },
+      10: { sesion:8, decision:'Personas',   nombre:'Multipliers',                                         autor:'Liz Wiseman',         resumen:'Liderazgo multiplicador.',                                                                                                   fecha:'27 de octubre' },
+      11: { sesion:9, decision:'Estrategia', nombre:'Turning the Flywheel',                                autor:'Jim Collins',         resumen:'Profundiza el concepto de flywheel: cada empujón acelera el volante y con el tiempo el impulso se vuelve imparable.',        fecha:'24 de noviembre' },
+    };
+    const d = datos[l.id];
+    return `  { id: ${l.id}, sesion: ${d.sesion}, decision: '${d.decision}', nombre: ${JSON.stringify(d.nombre)}, autor: '${d.autor}', resumen: '${d.resumen}', fecha: '${d.fecha}', estado: '${l.estado}', pdf: '${pdfs[l.id] || ''}' },`;
+  }).join('\n');
+
+  return `<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Club de Lectura · Scaling</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0B1F4A; --blue: #185FA5; --bg: #F7F6F3; --white: #FFFFFF;
+    --text: #1A1A2E; --muted: #6B7280; --border: rgba(0,0,0,0.08);
+    --gold: #C8941A; --gold-bg: #FEF8E6;
+    --c-estrategia: #185FA5; --c-estrategia-bg: #EBF3FB;
+    --c-personas: #A07800;   --c-personas-bg: #FEF8E1;
+    --c-ejecucion: #6B4423;  --c-ejecucion-bg: #F5EDE5;
+    --c-caja: #1A7A4A;       --c-caja-bg: #E5F5ED;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body { font-family: 'DM Sans', sans-serif; background: #fff; color: var(--text); min-height: 100vh; -webkit-font-smoothing: antialiased; }
+  .filters { background: #fff; padding: 14px 16px; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border); }
+  .pills-wrap { display: flex; gap: 6px; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  .pills-wrap::-webkit-scrollbar { display: none; }
+  .pill { flex-shrink: 0; padding: 7px 16px; border-radius: 999px; font-size: 13px; cursor: pointer; border: 1px solid var(--border); background: #fff; color: var(--muted); transition: all 0.15s; white-space: nowrap; }
+  .pill.active-leido   { background: #1A7A4A; color: #fff; border-color: #1A7A4A; }
+  .pill.active-leyendo { background: var(--blue); color: #fff; border-color: var(--blue); }
+  .pill.active-porleer { background: #6B4423; color: #fff; border-color: #6B4423; }
+  .cards-wrap { padding: 12px 16px 40px; display: flex; flex-direction: column; gap: 10px; }
+  @media (min-width: 600px) { .cards-wrap { padding: 20px 24px 48px; } .filters { padding: 16px 24px; } }
+  .book-card { background: #fff; border-radius: 14px; border: 1px solid var(--border); overflow: hidden; transition: box-shadow 0.18s; display: flex; flex-direction: column; }
+  .book-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.07); }
+  @media (min-width: 600px) {
+    .book-card { flex-direction: row; align-items: stretch; }
+    .book-card .card-body { flex: 1; border-bottom: none; }
+    .book-card .card-footer { border-top: none; border-left: 1px solid var(--border); flex-direction: column; align-items: flex-end; justify-content: center; min-width: 220px; padding: 16px 20px; gap: 10px; }
+    .book-card .footer-right { flex-direction: column; align-items: flex-end; gap: 8px; }
+  }
+  .card-body { padding: 16px 20px; display: flex; gap: 16px; align-items: center; }
+  .book-spine { flex-shrink: 0; width: 44px; height: 60px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 500; }
+  .spine-E { background: var(--c-estrategia-bg); color: var(--c-estrategia); }
+  .spine-P { background: var(--c-personas-bg);   color: var(--c-personas); }
+  .spine-X { background: var(--c-ejecucion-bg);  color: var(--c-ejecucion); }
+  .spine-C { background: var(--c-caja-bg);        color: var(--c-caja); }
+  .card-main { flex: 1; min-width: 0; }
+  .card-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap; }
+  .decision-badge { font-size: 10px; font-weight: 500; padding: 2px 8px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .badge-E { background: var(--c-estrategia-bg); color: var(--c-estrategia); }
+  .badge-P { background: var(--c-personas-bg);   color: var(--c-personas); }
+  .badge-X { background: var(--c-ejecucion-bg);  color: var(--c-ejecucion); }
+  .badge-C { background: var(--c-caja-bg);        color: var(--c-caja); }
+  .sesion-num { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); }
+  .book-title  { font-family: 'Nunito Sans', sans-serif; font-weight: 700; font-size: 16px; color: var(--text); line-height: 1.3; margin-bottom: 3px; }
+  .book-author { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+  .book-resumen { font-size: 13px; color: #444; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .card-footer { border-top: 1px solid var(--border); padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .fecha-tag { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); }
+  .footer-right { display: flex; align-items: center; gap: 12px; }
+  .stars-wrap { display: flex; align-items: center; gap: 4px; }
+  .stars { display: flex; gap: 2px; }
+  .star { font-size: 16px; cursor: pointer; color: #D1D5DB; transition: color 0.1s, transform 0.1s; line-height: 1; user-select: none; }
+  .star.filled { color: var(--gold); }
+  .star:hover { transform: scale(1.2); }
+  .avg-label { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); min-width: 28px; }
+  .pdf-btn { display: flex; align-items: center; gap: 5px; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 500; color: var(--blue); background: var(--c-estrategia-bg); border: none; cursor: pointer; text-decoration: none; transition: background 0.15s; white-space: nowrap; }
+  .pdf-btn:hover { background: #D5E8F7; }
+  .pdf-btn.no-pdf { color: var(--muted); background: #F3F4F6; cursor: default; }
+  .estado-badge { font-size: 10px; font-weight: 500; padding: 3px 8px; border-radius: 4px; }
+  .estado-leido   { background: #E5F5ED; color: #1A7A4A; }
+  .estado-leyendo { background: #EBF3FB; color: #185FA5; }
+  .estado-porleer { background: #F5EDE5; color: #6B4423; }
+  .loading-msg { text-align: center; padding: 48px 16px; color: var(--muted); font-size: 14px; }
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 200; align-items: center; justify-content: center; padding: 20px; }
+  .modal-overlay.visible { display: flex; }
+  .modal { background: #fff; border-radius: 16px; padding: 28px 24px; width: 100%; max-width: 360px; text-align: center; }
+  .modal-title { font-family: 'Nunito Sans', sans-serif; font-weight: 700; font-size: 20px; margin-bottom: 8px; color: var(--text); }
+  .modal-sub { font-size: 13px; color: var(--muted); margin-bottom: 20px; line-height: 1.5; }
+  .modal-input { width: 100%; padding: 11px 14px; border: 1px solid rgba(0,0,0,0.15); border-radius: 10px; font-size: 14px; font-family: 'DM Sans', sans-serif; outline: none; margin-bottom: 14px; transition: border-color 0.2s; }
+  .modal-input:focus { border-color: var(--blue); }
+  .modal-btn { width: 100%; padding: 12px; background: var(--navy); color: #fff; border: none; border-radius: 10px; font-size: 14px; font-weight: 500; font-family: 'DM Sans', sans-serif; cursor: pointer; }
+  .modal-btn:hover { opacity: 0.9; }
+  .user-chip { display: flex; align-items: center; gap: 6px; padding: 6px 12px; background: #fff; border-radius: 999px; font-size: 12px; color: var(--muted); cursor: pointer; border: 1px solid var(--border); }
+  .user-chip-dot { width: 8px; height: 8px; border-radius: 50%; background: #1A7A4A; }
+  .top-bar { background: #fff; padding: 12px 16px; display: flex; align-items: center; justify-content: flex-end; border-bottom: 1px solid var(--border); }
+  @media (min-width: 600px) { .top-bar { padding: 14px 24px; } }
+</style>
+</head>
+<body>
+
+<div class="modal-overlay visible" id="modal">
+  <div class="modal">
+    <div class="modal-title">¡Hola!</div>
+    <div class="modal-sub">Ingresa tu nombre para poder guardar tu valoración de cada lectura.</div>
+    <input class="modal-input" type="text" id="nombre-input" placeholder="Tu nombre…" maxlength="40">
+    <button class="modal-btn" onclick="guardarNombre()">Entrar al Club de Lectura</button>
+  </div>
+</div>
+
+<div class="top-bar">
+  <div class="user-chip" id="user-chip" onclick="cambiarNombre()" style="display:none">
+    <div class="user-chip-dot"></div>
+    <span id="user-chip-name"></span>
+  </div>
+</div>
+
+<div class="filters">
+  <div class="pills-wrap">
+    <div class="pill active-leido"  onclick="filtrar('Leído', this)">Leídas</div>
+    <div class="pill"               onclick="filtrar('Leyendo', this)">Leyendo</div>
+    <div class="pill"               onclick="filtrar('Por leer', this)">Por leer</div>
+  </div>
+</div>
+
+<div class="cards-wrap" id="cards-wrap">
+  <div class="loading-msg">Cargando lecturas…</div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://mgbnxianbkpypgukgkgf.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1nYm54aWFuYmtweXBndWtna2dmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc5ODc2MDEsImV4cCI6MjA5MzU2MzYwMX0.ScAlPT3t_u6QhPL909PkItcm31cwhBxyZ3Pe-p-4haI';
+
+const lecturas = [
+${filas}
+];
+
+let currentFilter = 'Leído';
+let userName = localStorage.getItem('scaling_user') || '';
+let votaciones = {};
+const decisionMap = { 'Estrategia':'E', 'Personas':'P', 'Ejecución':'X', 'Caja':'C' };
+
+function guardarNombre() {
+  const input = document.getElementById('nombre-input').value.trim();
+  if (!input) return;
+  userName = input;
+  localStorage.setItem('scaling_user', userName);
+  document.getElementById('modal').classList.remove('visible');
+  document.getElementById('user-chip').style.display = 'flex';
+  document.getElementById('user-chip-name').textContent = userName;
+  cargarVotaciones();
+}
+function cambiarNombre() {
+  localStorage.removeItem('scaling_user');
+  userName = '';
+  document.getElementById('modal').classList.add('visible');
+  document.getElementById('user-chip').style.display = 'none';
+  document.getElementById('nombre-input').value = '';
+}
+document.getElementById('nombre-input').addEventListener('keydown', e => { if (e.key === 'Enter') guardarNombre(); });
+
+async function cargarVotaciones() {
+  try {
+    const res = await fetch(SUPABASE_URL + '/rest/v1/valoraciones?select=*', {
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+    });
+    const data = await res.json();
+    const votos = {};
+    data.forEach(row => {
+      const id = parseInt(row.lectura_id), stars = parseInt(row.estrellas);
+      if (!id || !stars) return;
+      if (!votos[id]) votos[id] = { suma: 0, count: 0, miVoto: 0 };
+      votos[id].suma += stars; votos[id].count += 1;
+      if (row.usuario === userName) votos[id].miVoto = stars;
+    });
+    Object.keys(votos).forEach(id => {
+      const v = votos[id];
+      votaciones[id] = { promedio: (v.suma/v.count).toFixed(1), totalVotos: v.count, miVoto: v.miVoto };
+    });
+  } catch(e) {}
+  renderCards();
+}
+
+function getVisible() { return lecturas.filter(l => l.estado === currentFilter); }
+
+function renderCards() {
+  const wrap = document.getElementById('cards-wrap');
+  const visible = getVisible();
+  if (!visible.length) { wrap.innerHTML = '<div class="loading-msg">No hay lecturas en esta categoría.</div>'; return; }
+  wrap.innerHTML = visible.map(cardHTML).join('');
+}
+
+function cardHTML(l) {
+  const cat = decisionMap[l.decision] || 'E';
+  const v = votaciones[l.id] || { promedio:'—', totalVotos:0, miVoto:0 };
+  const estrellas = [1,2,3,4,5].map(n => '<span class="star ' + (n <= v.miVoto ? 'filled' : '') + '" onclick="handleVoto(' + l.id + ',' + n + ')">★</span>').join('');
+  const pdfBtn = l.pdf ? '<a href="' + l.pdf + '" target="_blank" class="pdf-btn">Ver PDF</a>' : '<span class="pdf-btn no-pdf">Sin PDF</span>';
+  const estadoBadge = l.estado === 'Leído' ? '<span class="estado-badge estado-leido">Leída</span>' : l.estado === 'Por leer' ? '<span class="estado-badge estado-porleer">Por leer</span>' : '<span class="estado-badge estado-leyendo">Leyendo</span>';
+  return '<div class="book-card" data-id="' + l.id + '"><div class="card-body"><div class="book-spine spine-' + cat + '">' + cat + l.sesion + '</div><div class="card-main"><div class="card-meta"><span class="decision-badge badge-' + cat + '">' + l.decision + '</span><span class="sesion-num">Sesión ' + l.sesion + '</span>' + estadoBadge + '</div><div class="book-title">' + l.nombre + '</div><div class="book-author">' + l.autor + '</div><div class="book-resumen">' + l.resumen + '</div></div></div><div class="card-footer"><span class="fecha-tag">Fecha Club de Lectura: ' + l.fecha + '</span><div class="footer-right"><div class="stars-wrap"><div class="stars">' + estrellas + '</div><span class="avg-label">' + (v.promedio !== '—' ? v.promedio : '—') + ' ' + (v.totalVotos > 0 ? '(' + v.totalVotos + ')' : '') + '</span></div>' + pdfBtn + '</div></div></div>';
+}
+
+function handleVoto(lecturaId, estrellas) {
+  if (!userName) { document.getElementById('modal').classList.add('visible'); return; }
+  if (!votaciones[lecturaId]) votaciones[lecturaId] = { promedio: estrellas, totalVotos: 1, miVoto: estrellas };
+  else votaciones[lecturaId].miVoto = estrellas;
+  guardarVoto(lecturaId, estrellas);
+  renderCards();
+}
+
+async function guardarVoto(lecturaId, estrellas) {
+  try {
+    await fetch(SUPABASE_URL + '/rest/v1/valoraciones', {
+      method: 'POST',
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+      body: JSON.stringify({ lectura_id: lecturaId, usuario: userName, estrellas, fecha: new Date().toLocaleDateString('es-CL') })
+    });
+  } catch(e) {}
+}
+
+function filtrar(estado, el) {
+  currentFilter = estado;
+  document.querySelectorAll('.pill').forEach(p => p.className = 'pill');
+  if (estado === 'Leído') el.classList.add('active-leido');
+  else if (estado === 'Por leer') el.classList.add('active-porleer');
+  else el.classList.add('active-leyendo');
+  renderCards();
+}
+
+if (userName) {
+  document.getElementById('modal').classList.remove('visible');
+  document.getElementById('user-chip').style.display = 'flex';
+  document.getElementById('user-chip-name').textContent = userName;
+  cargarVotaciones();
+} else {
+  renderCards();
+}
+<\/script>
+</body>
+</html>`;
+}
+</script>
+</body>
+</html>
