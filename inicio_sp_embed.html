@@ -1,0 +1,252 @@
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
+:root{--navy:#1a2744;--accent:#4f8ef7;--al:#e8f0fe;--gold:#e8a838;--gl:#fdf3e0;--green:#2d9e6b;--grl:#e6f7f1;--red:#e05252;--rl:#fff0f0;--txt:#1a2744;--muted:#6b7a99;--border:#e4e8f0;--bg:#f6f8fd;--white:#fff}
+body{background:var(--bg);color:var(--txt);font-size:14px}
+.hdr{background:var(--navy);padding:24px 32px 0}
+.ey{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:6px}
+.hdr h1{font-size:24px;font-weight:700;color:#fff;margin-bottom:4px}
+.hdr .sub{font-size:12px;color:rgba(255,255,255,.5);margin-bottom:20px}
+.tabs{display:flex;gap:4px}
+.tb{padding:10px 20px;font-size:12px;font-weight:700;border:none;border-radius:6px 6px 0 0;cursor:pointer;background:#dce3f0;color:var(--muted);position:relative;bottom:-1px}
+.tb.on{background:var(--bg);color:var(--navy)}
+.wrap{max-width:800px;margin:0 auto;padding:28px 32px 48px}
+.panel{display:none}.panel.on{display:block}
+.intro h2{font-size:18px;font-weight:700;color:var(--navy);margin-bottom:4px}
+.intro p{font-size:12px;color:var(--muted);margin-bottom:20px}
+.steps{display:flex;flex-direction:column;gap:12px}
+.card{background:var(--white);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.ch{display:flex;align-items:flex-start;gap:12px;padding:16px 20px 12px;cursor:pointer;user-select:none}
+.num{flex-shrink:0;width:28px;height:28px;border-radius:50%;background:var(--al);color:var(--accent);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.tw{flex:1}
+.tt{font-size:14px;font-weight:700;color:var(--navy)}
+.ts{font-size:11px;color:var(--muted);margin-top:2px}
+.cv{color:var(--muted);font-size:16px;transition:transform .2s;margin-top:2px}
+.card.op .cv{transform:rotate(180deg)}
+.cb{display:none;padding:0 20px 16px 60px}
+.card.op .cb{display:block}
+.cl{list-style:none;display:flex;flex-direction:column;gap:8px}
+.cl li{display:flex;align-items:flex-start;gap:8px;font-size:13px;line-height:1.5;cursor:pointer}
+.cl li::before{content:'';flex-shrink:0;width:16px;height:16px;border-radius:50%;border:2px solid var(--border);margin-top:2px}
+.cl li.ck::before{background:var(--green);border-color:var(--green);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2 6l3 3 5-5' stroke='white' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:center;background-size:9px}
+.note{margin-top:10px;padding:10px 12px;border-radius:6px;font-size:12px;line-height:1.5;display:flex;gap:6px}
+.note.tip{background:var(--gl);color:#7a5210;border-left:3px solid var(--gold)}
+.note.info{background:var(--al);color:#1e3a7a;border-left:3px solid var(--accent)}
+.note.warn{background:var(--rl);color:#7a2020;border-left:3px solid var(--red)}
+.div{display:flex;align-items:center;gap:10px;margin:24px 0 16px}
+.div hr{flex:1;border:none;border-top:1px solid var(--border)}
+.div span{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px}
+.pc{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:14px 16px}
+.pc h4{font-size:12px;font-weight:700;color:var(--navy);margin-bottom:6px}
+.pc p,.pc ul{font-size:12px;color:var(--muted);line-height:1.5}
+.pc ul{list-style:none}
+.pc ul li{margin-bottom:3px}
+.pc ul li::before{content:'→ ';color:var(--accent);font-size:10px}
+.scr{background:var(--navy);border-radius:6px;padding:12px 14px;margin-top:10px}
+.scr .sl{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:4px}
+.scr p{font-size:12px;color:rgba(255,255,255,.9);font-style:italic;line-height:1.5}
+.ql{display:flex;flex-direction:column;gap:6px;margin-top:6px}
+.qi{background:var(--al);border-radius:6px;padding:8px 12px;font-size:12px;color:var(--navy);font-weight:500;display:flex;gap:6px}
+</style>
+
+<div class="hdr">
+  <h1>El Viaje del Cliente Nuevo</h1>
+  <div class="tabs">
+    <button class="tb on" onclick="sw('pre')">Previo a Sesión de Inicio</button>
+    <button class="tb" onclick="sw('post')">Post Sesión de Inicio</button>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="panel on" id="p-pre">
+    <div class="intro"><h2>Antes de la primera sesión</h2><p>Asegura que cada hito esté completo antes de avanzar al siguiente.</p></div>
+    <div class="steps">
+
+      <div class="card op">
+        <div class="ch" onclick="tog(this)">
+          <div class="num">1</div>
+          <div class="tw"><div class="tt">Email de confirmación del cliente</div><div class="ts">El programa no comienza hasta recibir este email</div></div>
+          <div class="cv">&#8964;</div>
+        </div>
+        <div class="cb">
+          <ul class="cl"><li onclick="ck(this)">Solicitar email de confirmación formal al cliente</li></ul>
+          <div class="note warn">⚠️ Debe ser <strong>vía email</strong>, no por llamada ni WhatsApp. Una vez recibido, el programa comienza oficialmente.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="ch" onclick="tog(this)">
+          <div class="num">2</div>
+          <div class="tw"><div class="tt">Respuesta de CX al email de confirmación</div><div class="ts">CX activa el proceso de bienvenida</div></div>
+          <div class="cv">&#8964;</div>
+        </div>
+        <div class="cb">
+          <ul class="cl">
+            <li onclick="ck(this)">Enviar documento de <strong>"Bienvenidos"</strong> al cliente</li>
+            <li onclick="ck(this)">Adjuntar email tipo para que el GG informe a su equipo sobre el inicio del programa</li>
+            <li onclick="ck(this)">Sugerir al GG que nos copie en el envío a su equipo (agiliza el proceso)</li>
+            <li onclick="ck(this)">Informar que CX se contactará con la persona de facturación</li>
+            <li onclick="ck(this)">Coach agenda reunión Kick Off junto a CX</li>
+            <li onclick="ck(this)">CX agenda entrevistas de diagnóstico con el equipo y envía encuestas</li>
+          </ul>
+          <div class="note tip">💡 Si el Coach no puede participar de todas las entrevistas, priorizar las personas con <strong>cargos importantes</strong> en la empresa.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="ch" onclick="tog(this)">
+          <div class="num">3</div>
+          <div class="tw"><div class="tt">Reunión Kick Off</div><div class="ts">Gerente General · Coach · CX (CX solo al inicio)</div></div>
+          <div class="cv">&#8964;</div>
+        </div>
+        <div class="cb">
+          <ul class="cl">
+            <li onclick="ck(this)">Definir fecha de la Sesión de Inicio (proponer posibles sugerencias)</li>
+            <li onclick="ck(this)">Confirmar el equipo que participará en sesiones y entrevistas</li>
+            <li onclick="ck(this)">Obtener datos de facturación y contraparte financiera</li>
+            <li onclick="ck(this)">Resolver dudas surgidas del email de "Bienvenidos"</li>
+          </ul>
+          <div class="note info">ℹ️ No siempre existe claridad sobre quiénes participarán. En las entrevistas solo deben participar quienes el GG quiera escuchar.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="ch" onclick="tog(this)">
+          <div class="num">4</div>
+          <div class="tw"><div class="tt">Gestión de facturación</div><div class="ts">Envío de email de cobranza</div></div>
+          <div class="cv">&#8964;</div>
+        </div>
+        <div class="cb">
+          <ul class="cl"><li onclick="ck(this)">Enviar email de cobranza al cliente</li></ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="panel" id="p-post">
+    <div class="intro"><h2>Después de la sesión de inicio</h2><p>Acompañamiento en las primeras reuniones del cliente para consolidar el hábito.</p></div>
+    <div class="steps">
+
+      <div class="card op">
+        <div class="ch" onclick="tog(this)">
+          <div class="num" style="background:#e6f7f1;color:#2d9e6b">A</div>
+          <div class="tw"><div class="tt">Primera Reunión Semanal del cliente</div><div class="ts">Apoyar la conducción y asegurar la implementación del hábito</div></div>
+          <div class="cv">&#8964;</div>
+        </div>
+        <div class="cb">
+          <ul class="cl">
+            <li onclick="ck(this)">Mostrar y explicar la estructura de la reunión semanal</li>
+            <li onclick="ck(this)">Resolver dudas del equipo</li>
+            <li onclick="ck(this)">Apoyar la definición de palancas asociadas a las prioridades</li>
+            <li onclick="ck(this)">Presentar la metodología QQC (o verificar que no haya dudas si ya se presentó)</li>
+            <li onclick="ck(this)">Moderar la sesión para que luego el GG pueda liderarla de forma autónoma</li>
+          </ul>
+          <div class="note tip">💡 El coach puede moderar la primera reunión y participar como espectador en las siguientes dos para asegurar la implementación del hábito.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="ch" onclick="tog(this)">
+          <div class="num" style="background:#e6f7f1;color:#2d9e6b">B</div>
+          <div class="tw"><div class="tt">Primera Reunión Diaria del cliente</div><div class="ts">Instalación del hábito de reunión diaria</div></div>
+          <div class="cv">&#8964;</div>
+        </div>
+        <div class="cb">
+          <ul class="cl">
+            <li onclick="ck(this)">Explicar y mostrar la estructura de la reunión diaria</li>
+            <li onclick="ck(this)">Resolver dudas del equipo</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="div"><hr><span>Principios de Coaching · Sesión 1</span><hr></div>
+    <div class="steps">
+
+      <div class="card">
+        <div class="ch" onclick="tog(this)">
+          <div class="num" style="background:#fdf3e0;color:#c17f24">1</div>
+          <div class="tw"><div class="tt">Bases de la relación de coaching</div><div class="ts">Establecer el marco de trabajo desde el inicio</div></div>
+          <div class="cv">&#8964;</div>
+        </div>
+        <div class="cb">
+          <div class="grid">
+            <div class="pc"><h4>🔒 Confidencialidad</h4><p>Todo lo hablado en sesiones es estrictamente confidencial.</p></div>
+            <div class="pc"><h4>🎯 Rol del Coach</h4><p>El coach <strong>no es un mensajero</strong> entre el cliente y la organización.</p></div>
+            <div class="pc"><h4>📅 Agendamiento</h4><ul><li>Definir frecuencia, día, hora y modalidad</li><li>Intencionar formato remoto</li><li>La disciplina es lo que importa</li></ul></div>
+            <div class="pc"><h4>🔄 Flexibilidad</h4><p>Las sesiones individuales pueden ajustarse ante topes con sesiones grupales.</p></div>
+            <div class="pc"><h4>📋 Agenda</h4><p>La agenda la lleva el <strong>cliente</strong>. Invitarlo a traer temas y decisiones pendientes.</p></div>
+            <div class="pc"><h4>⏸ Interrumpir</h4><p>Solicitar permiso para redirigir si la conversación se desvía.</p></div>
+          </div>
+          <div class="scr"><div class="sl">Guión sugerido</div><p>"Quiero pedirte permiso para interrumpir cuando sienta que nos estamos alejando de un tema."</p></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="ch" onclick="tog(this)">
+          <div class="num" style="background:#fdf3e0;color:#c17f24">2</div>
+          <div class="tw"><div class="tt">Buenas prácticas (según necesidad)</div><div class="ts">Apoyo adicional durante la sesión 1</div></div>
+          <div class="cv">&#8964;</div>
+        </div>
+        <div class="cb">
+          <ul class="cl">
+            <li onclick="ck(this)">Reunión con los Accountable para resolver dudas sobre el tablero de seguimiento semanal (prioridades, palancas, colores, KPI)</li>
+            <li onclick="ck(this)">Ofrecer participación en reuniones si se presentan problemas en su desarrollo</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="div"><hr><span>Sesiones de Continuidad · Estructura</span><hr></div>
+    <div class="steps">
+
+      <div class="card">
+        <div class="ch" onclick="tog(this)">
+          <div class="num" style="background:#e8f0fe;color:#4f8ef7">→</div>
+          <div class="tw"><div class="tt">Apertura de sesión</div><div class="ts">Preguntas para abrir el espacio</div></div>
+          <div class="cv">&#8964;</div>
+        </div>
+        <div class="cb">
+          <div class="ql">
+            <div class="qi">❓ ¿Qué traes en la cabeza hoy?</div>
+            <div class="qi">❓ ¿Qué podemos resolver juntos en esta sesión?</div>
+            <div class="qi">❓ ¿Qué tienes sin resolver que podamos trabajar juntos?</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="ch" onclick="tog(this)">
+          <div class="num" style="background:#e8f0fe;color:#4f8ef7">→</div>
+          <div class="tw"><div class="tt">Indagación en áreas de dolor</div><div class="ts">Preguntas clave por área</div></div>
+          <div class="cv">&#8964;</div>
+        </div>
+        <div class="cb">
+          <div class="grid">
+            <div class="pc"><h4>🗓 Reuniones</h4><ul><li>¿Cómo van las reuniones?</li><li>¿Cómo está la relación con el nuevo gerente?</li></ul></div>
+            <div class="pc"><h4>💰 Finanzas</h4><ul><li>¿Cómo están los resultados en cierres?</li><li>¿Cómo impacta el EBITDA en la caja?</li></ul></div>
+            <div class="pc" style="grid-column:1/-1"><h4>✅ Accountability</h4><ul><li>Revisar acuerdos de la sesión anterior</li><li>Invitar al GG a enviar resumen de acuerdos por mail</li></ul></div>
+          </div>
+          <div class="note warn" style="margin-top:10px">🚩 <div><strong>Si el cliente dice que todo está bien:</strong><br><em>"¿Crees que esta reunión te está siendo útil? ¿Cómo podemos mejorarla?"</em></div></div>
+          <div class="note info" style="margin-top:8px">💬 <div><strong>Si el cliente no quiere coaching:</strong><br>Reencuadrar como "reunión de seguimiento" o "reunión de acompañamiento".</div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+function sw(t){
+  document.querySelectorAll('.tb').forEach((b,i)=>b.classList.toggle('on',(i===0&&t==='pre')||(i===1&&t==='post')));
+  document.getElementById('p-pre').classList.toggle('on',t==='pre');
+  document.getElementById('p-post').classList.toggle('on',t==='post');
+}
+function tog(h){h.closest('.card').classList.toggle('op')}
+function ck(li){li.classList.toggle('ck')}
+</script>
