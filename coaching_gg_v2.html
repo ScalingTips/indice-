@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coaching GG · Guía de Sesión</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0B1F4A;
+    --blue: #185FA5;
+    --sky: #4A90D9;
+    --celeste: #9FE1CB;
+    --gold: #C8941A;
+    --gold-light: #FEF3DC;
+    --text: #1A1A2E;
+    --muted: #6B7280;
+    --border: #E5E7EB;
+    --bg: #F8F7F4;
+    --white: #FFFFFF;
+
+    --grow-g: #185FA5;
+    --grow-r: #1A7A4A;
+    --grow-o: #A07800;
+    --grow-w: #8B2616;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Nunito Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* ── Hero ── */
+  .hero {
+    background: var(--navy);
+    padding: 32px 24px 28px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: rgba(159,225,203,0.06);
+  }
+
+  .hero-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--celeste);
+    margin-bottom: 8px;
+    opacity: 0.8;
+  }
+
+  .hero-title {
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 26px;
+    font-weight: 600;
+    color: #fff;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+
+  .hero-sub {
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.6;
+    max-width: 480px;
+  }
+
+  .hero-meta {
+    display: flex;
+    gap: 16px;
+    margin-top: 18px;
+    flex-wrap: wrap;
+  }
+
+  .meta-chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+  }
+
+  .meta-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--celeste);
+    opacity: 0.6;
+  }
+
+  /* ── Nav tabs ── */
+  .nav {
+    background: #fff;
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: none;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .nav::-webkit-scrollbar { display: none; }
+
+  .nav-tab {
+    flex-shrink: 0;
+    padding: 13px 16px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .nav-tab.active { color: var(--navy); border-bottom-color: var(--navy); }
+
+  /* ── Content ── */
+  .content { padding: 20px 24px 60px; max-width: 780px; }
+
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* ── Section title ── */
+  .section-title {
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 20px;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+
+  .section-desc {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 24px;
+    line-height: 1.6;
+  }
+
+  /* ── GROW cards ── */
+  .grow-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+
+  .grow-card {
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+    background: #fff;
+  }
+
+  .grow-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 18px;
+    cursor: pointer;
+  }
+
+  .grow-letter {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 22px;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+
+  .letter-G { background: #EBF3FB; color: var(--grow-g); }
+  .letter-R { background: #E5F5ED; color: var(--grow-r); }
+  .letter-O { background: #FEF8E1; color: var(--grow-o); }
+  .letter-W { background: #FDEAE7; color: var(--grow-w); }
+
+  .grow-header-text { flex: 1; }
+  .grow-phase { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin-bottom: 2px; }
+  .grow-name { font-size: 15px; font-weight: 700; color: var(--text); }
+  .grow-time { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); margin-top: 2px; }
+
+  .grow-chevron { font-size: 12px; color: var(--muted); transition: transform 0.2s; }
+  .grow-card.open .grow-chevron { transform: rotate(180deg); }
+
+  .grow-body {
+    display: none;
+    padding: 0 18px 18px;
+    border-top: 1px solid var(--border);
+    padding-top: 16px;
+  }
+  .grow-card.open .grow-body { display: block; }
+
+  .grow-objetivo {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 14px;
+    font-style: italic;
+    line-height: 1.6;
+  }
+
+  .preguntas-label {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+
+  .pregunta-item {
+    display: flex;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: flex-start;
+  }
+  .pregunta-item:last-child { border-bottom: none; }
+
+  .pregunta-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    min-width: 18px;
+    padding-top: 2px;
+  }
+
+  .pregunta-text {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.5;
+    flex: 1;
+  }
+
+  .tip-box {
+    background: var(--gold-light);
+    border-left: 3px solid var(--gold);
+    border-radius: 0 8px 8px 0;
+    padding: 10px 14px;
+    margin-top: 14px;
+    font-size: 12px;
+    color: #633806;
+    line-height: 1.6;
+  }
+  .tip-label { font-weight: 800; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 3px; color: var(--gold); }
+
+  /* ── Herramientas ── */
+  .herramienta-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 18px;
+    margin-bottom: 12px;
+  }
+
+  .herramienta-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .herramienta-cuando {
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 10px;
+    font-style: italic;
+  }
+
+  .herramienta-desc {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.6;
+    margin-bottom: 10px;
+  }
+
+  .herramienta-preguntas {
+    background: var(--bg);
+    border-radius: 8px;
+    padding: 12px 14px;
+  }
+
+  .h-pregunta {
+    font-size: 12px;
+    color: var(--text);
+    padding: 5px 0;
+    border-bottom: 1px solid var(--border);
+    line-height: 1.5;
+  }
+  .h-pregunta:last-child { border-bottom: none; }
+
+  /* ── Principios ── */
+  .principio-item {
+    display: flex;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: flex-start;
+  }
+  .principio-item:last-child { border-bottom: none; }
+
+  .principio-num {
+    width: 28px; height: 28px;
+    border-radius: 8px;
+    background: var(--navy);
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    flex-shrink: 0;
+  }
+
+  .principio-text { flex: 1; }
+  .principio-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+  .principio-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+  /* ── Estructura sesión ── */
+  .sesion-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+    padding-left: 28px;
+  }
+
+  .sesion-timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px; top: 8px; bottom: 8px;
+    width: 2px;
+    background: var(--border);
+  }
+
+  .sesion-paso {
+    position: relative;
+    padding: 0 0 20px 20px;
+  }
+
+  .sesion-paso::before {
+    content: '';
+    position: absolute;
+    left: -20px; top: 5px;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--navy);
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 2px var(--navy);
+  }
+
+  .sesion-tiempo {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    margin-bottom: 3px;
+  }
+
+  .sesion-titulo {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .sesion-desc {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  @media (min-width: 600px) {
+    .hero { padding: 40px 32px 32px; }
+    .hero-title { font-size: 30px; }
+    .nav { padding: 0 32px; }
+    .content { padding: 24px 32px 60px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-label">Scaling · Entrenamiento Continuo</div>
+  <div class="hero-title">Sesiones de Coaching</div>
+  <div class="hero-sub">Guía para sesiones individuales de coaching con clientes, con una frecuencia semanal o cada 15 días según el acuerdo con cada GG.</div>
+  <div class="hero-meta">
+    <div class="meta-chip"><div class="meta-dot"></div>Sesiones individuales</div>
+    <div class="meta-chip"><div class="meta-dot"></div>45 minutos aproximadamente</div>
+  </div>
+</div>
+
+
+<!-- NAV -->
+<div class="nav">
+  <div class="nav-tab active" onclick="showSection('principios', this)">Principios</div>
+  <div class="nav-tab" onclick="showSection('sesiones', this)">Sesiones de Coaching</div>
+  <div class="nav-tab" onclick="showSection('grow', this)">Modelo GROW</div>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+
+  <!-- GROW -->
+  <div class="section" id="grow">
+    <div class="section-title">El modelo GROW</div>
+    <div class="section-desc">Estructura conversacional para guiar al GG desde donde está hacia donde quiere llegar. Cada fase tiene un propósito claro y preguntas poderosas asociadas.</div>
+
+    <div class="grow-grid">
+
+      <!-- G -->
+      <div class="grow-card open" onclick="toggleGrow(this)">
+        <div class="grow-header">
+          <div class="grow-letter letter-G">G</div>
+          <div class="grow-header-text">
+            <div class="grow-phase">Fase 1</div>
+            <div class="grow-name">Goal · Definir el objetivo</div>
+            <div class="grow-time">⏱ 5–8 minutos</div>
+          </div>
+          <div class="grow-chevron">▼</div>
+        </div>
+        <div class="grow-body">
+          <div class="grow-objetivo">Clarificar qué quiere lograr el GG en esta sesión y conectarlo con sus metas de largo plazo.</div>
+          <div class="preguntas-label">Preguntas guía</div>
+          <div class="pregunta-item"><span class="pregunta-num">1</span><span class="pregunta-text">¿Qué es lo que quieres lograr? ¿Cómo te gustaría que fuera? ¿Qué ganarías tú?</span></div>
+          <div class="pregunta-item"><span class="pregunta-num">2</span><span class="pregunta-text">¿Qué sería diferente si lograras ese objetivo?</span></div>
+          <div class="pregunta-item"><span class="pregunta-num">3</span><span class="pregunta-text">¿Cómo sabrás que alcanzaste lo que buscabas?</span></div>
+          <div class="pregunta-item"><span class="pregunta-num">4</span><span class="pregunta-text">¿Qué tan importante es esto para ti, del 1 al 10?</span></div>
+          <div class="pregunta-item"><span class="pregunta-num">5</span><span class="pregunta-text">¿Esto conecta con algo más grande que estás buscando?</span></div>
+          <div class="tip-box">
+            <div class="tip-label">Tip del coach</div>
+            No asumas que el tema del GG es el mismo que la semana anterior. Siempre pregunta qué quiere trabajar hoy. El objetivo debe ser específico y alcanzable en 45 minutos.
+          </div>
+        </div>
+      </div>
+
+      <!-- R -->
+      <div class="grow-card" onclick="toggleGrow(this)">
+        <div class="grow-header">
+          <div class="grow-letter letter-R">R</div>
+          <div class="grow-header-text">
+            <div class="grow-phase">Fase 2</div>
+            <div class="grow-name">Reality · Explorar la realidad actual</div>
+            <div class="grow-time">⏱ 10–12 minutos</div>
+          </div>
+          <div class="grow-chevron">▼</div>
+        </div>
+        <div class="grow-body">
+          <div class="grow-objetivo">Entender la situación actual con honestidad, sin juicio. Ayudar al GG a ver su realidad con mayor claridad.</div>
+          <div class="preguntas-label">Preguntas guía</div>
+          <div class="pregunta-item"><span class="pregunta-num">1</span><span class="pregunta-text">¿En qué estás actualmente con respecto a tu objetivo?</span></div>
+          <div class="pregunta-item"><span class="pregunta-num">2</span><span class="pregunta-text">¿Qué está pasando exactamente? ¿Cuándo ocurre?</span></div>
+          <div class="pregunta-item"><span class="pregunta-num">3</span><span class="pregunta-text">¿Qué has hecho hasta ahora frente a esto?</span></div>
+          <div class="pregunta-item"><span class="pregunta-num">4</span><span class="pregunta-text">¿Qué está funcionando y qué no?</span></div>
+          <div class="pregunta-item"><span class="pregunta-num">5</span><span class="pregunta-text">¿Qué efecto tiene esto en ti y en tu equipo?</span></div>
+          <div class="pregunta-item"><span class="pregunta-num">6</span><span class="pregunta-text">¿Qué no estás viendo que podría ser importante?</span></div>
+          <div class="tip-box">
+            <div class="tip-label">Tip del coach</div>
+            Escucha más de lo que hablas. Refleja lo que escuchas sin interpretarlo. Evita dar soluciones en esta fase — el GG necesita explorar antes de concluir.
+          </div>
+        </div>
+      </div>
+
+      <!-- O -->
+      <div class="grow-card" onclick="toggleGrow(this)">
+        <div class="grow-header">
+          <div class="grow-letter letter-O">O</div>
+          <div class="grow-header-text">
+            <div class="grow-phase">Fase 3</div>
+            <div class="grow-name">Options · Generar opciones</div>
+            <div class="grow-time">⏱ 12–15 minutos</div>
+          </div>
+          <div class="grow-chevron">▼</div>
+        </div>
+        <div class="grow-body">
+          <div class="grow-objetivo">Expandir el horizonte de posibilidades. El GG descubre alternativas que no había considerado.</div>
+          <div class="preguntas-label">Preguntas guía</div>
+          <div class="pregunta-item"><span class="pregunta-num">1</span><span class="pregunta-text">¿Qué opciones tienes frente a esta situación?</span></div>
+          <div class="pregunta-item"><span class="pregunta-num">2</span><span class="pregunta-text">¿Qué más podrías hacer? ¿Y qué más?</span></div>
+          <div class="pregunta-item"><span class="pregunta-num">3</span><span class="pregunta-text">Si no tuvieras ninguna restricción, ¿qué harías?</span></div>
+          <div class="pregunta-item"><span class="pregunta-num">4</span><span class="pregunta-text">¿Qué haría alguien que admiras en esta situación?</span></div>
+          <div class="pregunta-item"><span class="pregunta-num">5</span><span class="pregunta-text">¿Cuál de estas opciones te genera más energía?</span></div>
+          <div class="pregunta-item"><span class="pregunta-num">6</span><span class="pregunta-text">¿Cuáles son los pros y contras de cada opción?</span></div>
+          <div class="pregunta-item"><span class="pregunta-num">7</span><span class="pregunta-text">¿Qué te ha funcionado en el pasado?</span></div>
+          <div class="pregunta-item"><span class="pregunta-num">8</span><span class="pregunta-text">¿Dónde podrías obtener más información?</span></div>
+          <div class="tip-box">
+            <div class="tip-label">Tip del coach</div>
+            No evalúes las opciones mientras las genera — primero cantidad, luego calidad. Si el GG se bloquea, puedes ofrecer una opción como pregunta: "¿Has pensado en...?"
+          </div>
+        </div>
+      </div>
+
+      <!-- W -->
+      <div class="grow-card" onclick="toggleGrow(this)">
+        <div class="grow-header">
+          <div class="grow-letter letter-W">W</div>
+          <div class="grow-header-text">
+            <div class="grow-phase">Fase 4</div>
+            <div class="grow-name">Will · Comprometerse con la acción</div>
+            <div class="grow-time">⏱ 8–10 minutos</div>
+          </div>
+          <div class="grow-chevron">▼</div>
+        </div>
+        <div class="grow-body">
+          <div class="grow-objetivo">Convertir la reflexión en compromisos concretos y medibles para las próximas dos semanas.</div>
+          <div class="preguntas-label">Preguntas guía</div>
+          <div class="pregunta-item"><span class="pregunta-num">1</span><span class="pregunta-text">¿Qué vas a hacer concretamente?</span></div>
+          <div class="pregunta-item"><span class="pregunta-num">2</span><span class="pregunta-text">¿Cuándo exactamente lo harás?</span></div>
+          <div class="pregunta-item"><span class="pregunta-num">3</span><span class="pregunta-text">¿Qué podría impedirte hacerlo y cómo lo manejarás?</span></div>
+          <div class="pregunta-item"><span class="pregunta-num">4</span><span class="pregunta-text">¿Qué apoyo necesitas?</span></div>
+          <div class="pregunta-item"><span class="pregunta-num">5</span><span class="pregunta-text">¿Qué tan comprometido estás del 1 al 10?</span></div>
+          <div class="pregunta-item"><span class="pregunta-num">6</span><span class="pregunta-text">¿Cómo lo vas a hacer?</span></div>
+          <div class="pregunta-item"><span class="pregunta-num">7</span><span class="pregunta-text">¿Cuándo lo vas a hacer?</span></div>
+          <div class="pregunta-item"><span class="pregunta-num">8</span><span class="pregunta-text">¿Con quién lo vas a hacer?</span></div>
+          <div class="tip-box">
+            <div class="tip-label">Tip del coach</div>
+            Anota el compromiso o acción a tomar. En la próxima sesión, indaga sobre ese compromiso con preguntas que inviten a la reflexión: ¿Qué pasó? ¿Qué hiciste tú? ¿Qué aprendiste?
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Preguntas poderosas al final del GROW -->
+    <div class="herramienta-card" style="margin-top:8px">
+      <div class="herramienta-title">🎯 Preguntas poderosas</div>
+      <div class="herramienta-cuando">Usar en cualquier momento de la sesión para profundizar</div>
+      <div class="herramienta-desc">Preguntas que abren la reflexión, desafían supuestos y generan perspectivas nuevas. Son abiertas, breves y van directo al centro del asunto.</div>
+      <div class="herramienta-preguntas">
+        <div class="h-pregunta">¿Qué pasó esta semana?</div>
+        <div class="h-pregunta">¿Qué hiciste tú?</div>
+        <div class="h-pregunta">¿Hay algo más que se pueda hacer?</div>
+        <div class="h-pregunta">¿Qué es lo que más te importa de esto?</div>
+        <div class="h-pregunta">¿Hay algo que se esté evitando?</div>
+        <div class="h-pregunta">¿Qué pasaría si lo haces? ¿Y si no lo haces?</div>
+        <div class="h-pregunta">¿Qué te dice tu intuición?</div>
+        <div class="h-pregunta">¿Cuál es el peor escenario posible? ¿Podrías manejarlo?</div>
+        <div class="h-pregunta">¿Qué necesitas soltar para avanzar?</div>
+        <div class="h-pregunta">¿Qué consejo le darías a un amigo en tu misma situación?</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- PRINCIPIOS -->
+  <div class="section active" id="principios">
+    <div class="section-title">Principios del coaching</div>
+    <div class="section-desc">El coaching coactivo se basa en la creencia de que el cliente es completo y capaz. Estos principios guían la postura del coach — no lo que hace, sino desde dónde lo hace.</div>
+
+    <div class="principio-item">
+      <div class="principio-num">1</div>
+      <div class="principio-text">
+        <div class="principio-title">El cliente lleva la agenda</div>
+        <div class="principio-desc">El GG decide qué se trabaja en cada sesión. El coach no llega con temas preparados, hipótesis previas ni objetivos propios. La sesión pertenece al cliente.</div>
+      </div>
+    </div>
+    <div class="principio-item">
+      <div class="principio-num">2</div>
+      <div class="principio-text">
+        <div class="principio-title">El cliente es completo, capaz y creativo</div>
+        <div class="principio-desc">El coaching coactivo parte de la premisa de que el GG no está roto ni necesita ser arreglado. Tiene todo lo que necesita — el coach ayuda a que lo descubra.</div>
+      </div>
+    </div>
+    <div class="principio-item">
+      <div class="principio-num">3</div>
+      <div class="principio-text">
+        <div class="principio-title">Presencia total y sin juicio</div>
+        <div class="principio-desc">El coach está completamente presente — sin agenda, sin juicio, sin necesidad de tener razón. Escucha lo que se dice, lo que no se dice y lo que se siente.</div>
+      </div>
+    </div>
+    <div class="principio-item">
+      <div class="principio-num">4</div>
+      <div class="principio-text">
+        <div class="principio-title">Coaching adaptativo</div>
+        <div class="principio-desc">Cada sesión es distinta. El coach se adapta al estado emocional, la energía y las necesidades del GG en ese momento. No hay fórmulas fijas.</div>
+      </div>
+    </div>
+    <div class="principio-item">
+      <div class="principio-num">5</div>
+      <div class="principio-text">
+        <div class="principio-title">Honrar lo que emerge</div>
+        <div class="principio-desc">Si el GG llega con algo urgente, eso es lo que se trabaja — aunque no sea lo "esperado". Lo que surge en el momento tiene valor y hay que seguirlo.</div>
+      </div>
+    </div>
+    <div class="principio-item">
+      <div class="principio-num">6</div>
+      <div class="principio-text">
+        <div class="principio-title">Trabajar en todos los niveles</div>
+        <div class="principio-desc">El coaching coactivo trabaja con la persona completa: lo que hace, lo que siente y quién es. No solo con los problemas de negocio sino con el ser humano detrás del líder.</div>
+      </div>
+    </div>
+    <div class="principio-item">
+      <div class="principio-num">7</div>
+      <div class="principio-text">
+        <div class="principio-title">Confidencialidad absoluta</div>
+        <div class="principio-desc">Todo lo que se habla en la sesión es confidencial. Esta es la base de la confianza que hace posible la profundidad del coaching.</div>
+      </div>
+    </div>
+
+
+</div>
+
+  <!-- SESIONES DE COACHING -->
+  <div class="section" id="sesiones">
+    <div class="section-title">Sesiones de Coaching</div>
+    <div class="section-desc">Guía práctica para la preparación y conducción de cada sesión con el GG.</div>
+
+    <!-- Kick Off -->
+    <div class="section-title" style="font-size:16px;margin-bottom:6px;margin-top:4px">Sesión 1 · Kick Off</div>
+    <div class="section-desc" style="margin-bottom:16px">Establece las bases de la relación. Su propósito es crear el contexto adecuado, definir las reglas del juego y generar confianza desde el primer encuentro.</div>
+
+    <div class="sesion-timeline" style="margin-bottom:28px">
+
+      <div class="sesion-paso">
+        <div class="sesion-tiempo">1 · Bases</div>
+        <div class="sesion-titulo">Establecer el marco de la relación</div>
+        <div class="sesion-desc">
+          <strong>Confidencialidad:</strong> Todo lo hablado en sesiones es estrictamente confidencial. El coach no es un mensajero entre el coachee y la organización.<br><br>
+          <strong>Agenda:</strong> Definir frecuencia, día, hora y modalidad. Intencionar el formato remoto — permite mayor flexibilidad y la disciplina es lo que realmente importa.<br><br>
+          <strong>Flexibilidad:</strong> Las sesiones individuales pueden ajustarse cuando existan compromisos grupales del programa. Se coordinará con anticipación.
+        </div>
+      </div>
+
+      <div class="sesion-paso">
+        <div class="sesion-tiempo">2 · Propósito</div>
+        <div class="sesion-titulo">Dejar claro el espíritu de las sesiones</div>
+        <div class="sesion-desc">
+          <em>"El objetivo no es ponerse al día. Esta es una hora dedicada exclusivamente a mejorar. Una hora de tu semana para pensar, reflexionar y avanzar."</em><br><br>
+          Referencia útil: el método Toyota — siempre buscar el punto de mejora, no la validación.
+        </div>
+      </div>
+
+      <div class="sesion-paso">
+        <div class="sesion-tiempo">3 · Contrato</div>
+        <div class="sesion-titulo">Dos compromisos concretos</div>
+        <div class="sesion-desc">
+          · Que el GG traiga a cada sesión temas, situaciones sin resolver o decisiones que necesite pensar.<br><br>
+          · Que le otorgue permiso al coach para interrumpir cuando la conversación se desvíe hacia temas que no aporten valor.
+        </div>
+      </div>
+
+      <div class="sesion-paso">
+        <div class="sesion-tiempo">4 · Opcional</div>
+        <div class="sesion-titulo">Revisar objetivos del programa</div>
+        <div class="sesion-desc">Si existe un informe de diagnóstico previo, esta es una instancia adecuada para revisar los objetivos definidos con la organización — sin que parezca una evaluación, sino un norte compartido.</div>
+      </div>
+
+    </div>
+
+    <!-- Señales de alerta -->
+    <div class="tip-box" style="border-left:3px solid #C8941A;margin-bottom:10px">
+      <div class="tip-label">⚠ Señal de alerta</div>
+      Si percibes que el coachee no está comprometido con la sesión, no avances sin preguntarle directamente: <em>"¿Cómo crees que podemos mejorar los resultados de estas sesiones?"</em>
+    </div>
+
+    <div class="tip-box">
+      <div class="tip-label">Cuando el cliente no quiere coaching</div>
+      El coaching solo funciona cuando hay disposición genuina. Si el GG solicita que el coach trabaje con alguien de su equipo que no lo quiere, el mensaje es claro: <em>"Hablalo con él o ella. Si quiere, que me llame. Esto no funciona si se impone."</em>
+    </div>
+
+    <!-- Sesiones Generales -->
+    <div class="section-title" style="font-size:16px;margin-bottom:6px;margin-top:32px">Sesiones Generales</div>
+    <div class="section-desc" style="margin-bottom:16px">Prácticas y postura para la conducción de cada sesión de continuidad con el GG.</div>
+
+    <div class="tip-box" style="margin-bottom:20px">
+      <div class="tip-label">Antes de cada sesión</div>
+      Revisar los compromisos y acuerdos de la sesión anterior para hacer seguimiento y accountability desde el primer minuto.
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:28px">
+
+      <div class="herramienta-card">
+        <div class="herramienta-title">🎧 Escuchar y preguntar</div>
+        <div class="herramienta-cuando">Postura fundamental durante toda la sesión</div>
+        <div class="herramienta-desc">El coach no da respuestas. Su rol es escuchar activamente y hacer preguntas que abran la reflexión. La respuesta siempre viene del cliente — el coach facilita que la encuentre.</div>
+        <div class="herramienta-preguntas">
+          <div class="h-pregunta">¿Qué traes en la cabeza hoy?</div>
+          <div class="h-pregunta">¿Qué tienes sin resolver que podamos trabajar juntos?</div>
+          <div class="h-pregunta">¿Cuánto te impacta esto en el EBITDA o en la caja?</div>
+        </div>
+      </div>
+
+      <div class="herramienta-card">
+        <div class="herramienta-title">📝 Tomar nota de acuerdos</div>
+        <div class="herramienta-cuando">Durante y al cierre de cada sesión</div>
+        <div class="herramienta-desc">Registrar los compromisos y acuerdos para hacer accountability real en la siguiente sesión. Proponer al GG que envíe un correo con las acciones acordadas para mantener el hilo entre sesiones.</div>
+      </div>
+
+      <div class="herramienta-card">
+        <div class="herramienta-title">📤 Seguimiento post-sesión</div>
+        <div class="herramienta-cuando">Después de cada sesión</div>
+        <div class="herramienta-desc">Hacer seguimiento con material relevante luego de cada sesión. Puede ser un recurso, una pregunta de reflexión o un recordatorio del compromiso asumido.</div>
+      </div>
+
+    </div>
+
+  </div>
+
+<script>
+function showSection(id, tab) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  tab.classList.add('active');
+}
+
+function toggleGrow(card) {
+  const isOpen = card.classList.contains('open');
+  document.querySelectorAll('.grow-card').forEach(c => c.classList.remove('open'));
+  if (!isOpen) card.classList.add('open');
+}
+</script>
+</body>
+</html>
