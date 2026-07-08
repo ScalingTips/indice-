@@ -1,0 +1,217 @@
+<div id="scaling-lecturas" style="font-family: 'Franklin Gothic Demi', 'Franklin Gothic Medium', Arial, sans-serif; max-width: 900px; margin: 0 auto; color: #032948;">
+
+  <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 0; border-bottom: 2px solid #eee;">
+    <button class="sl-tab sl-tab-active" data-pilar="personas" style="background:#E8A33D; color:#fff;">Personas</button>
+    <button class="sl-tab" data-pilar="estrategia" style="background:#EAF4FC; color:#032948;">Estrategia</button>
+    <button class="sl-tab" data-pilar="ejecucion" style="background:#F1EAE0; color:#032948;">Ejecución</button>
+    <button class="sl-tab" data-pilar="caja" style="background:#EDF5E4; color:#032948;">Caja</button>
+  </div>
+
+  <div id="sl-panel-personas" class="sl-panel" style="display:grid;">
+    <div class="sl-grid"></div>
+  </div>
+  <div id="sl-panel-estrategia" class="sl-panel" style="display:none;">
+    <div class="sl-grid"></div>
+  </div>
+  <div id="sl-panel-ejecucion" class="sl-panel" style="display:none;">
+    <div class="sl-grid"></div>
+  </div>
+  <div id="sl-panel-caja" class="sl-panel" style="display:none;">
+    <div class="sl-grid"></div>
+  </div>
+
+</div>
+
+<style>
+  #scaling-lecturas .sl-tab {
+    border: none;
+    padding: 10px 20px;
+    font-size: 19px;
+    font-weight: 700;
+    border-radius: 8px 8px 0 0;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  #scaling-lecturas .sl-panel {
+    padding: 16px 4px;
+  }
+  #scaling-lecturas .sl-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 10px;
+  }
+  #scaling-lecturas .sl-card {
+    border-radius: 8px;
+    padding: 12px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  #scaling-lecturas .sl-title {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 500;
+    color: #032948;
+    line-height: 1.3;
+  }
+  #scaling-lecturas .sl-author {
+    margin: 4px 0 0;
+    font-size: 14px;
+  }
+  #scaling-lecturas .sl-icon {
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+</style>
+
+<script>
+(function () {
+  var bookIcon = function (color) {
+    return '<svg class="sl-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="' + color + '" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">' +
+      '<path d="M12 5v15"/>' +
+      '<path d="M12 5c-1.5-1.5-4-2-7-2-1 0-1.5.2-1.5.2v14s.5-.2 1.5-.2c3 0 5.5.5 7 2"/>' +
+      '<path d="M12 5c1.5-1.5 4-2 7-2 1 0 1.5.2 1.5.2v14s-.5-.2-1.5-.2c-3 0-5.5.5-7 2"/>' +
+      '</svg>';
+  };
+
+  var webIcon = function (color) {
+    return '<svg class="sl-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="' + color + '" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">' +
+      '<circle cx="12" cy="12" r="9"/>' +
+      '<path d="M3 12h18"/>' +
+      '<path d="M12 3c2.5 2.5 3.8 5.8 3.8 9s-1.3 6.5-3.8 9c-2.5-2.5-3.8-5.8-3.8-9s1.3-6.5 3.8-9z"/>' +
+      '</svg>';
+  };
+
+  var data = {
+    personas: {
+      cardBg: '#FBF3E6', iconColor: '#c78a2e', authorColor: '#8a7550',
+      books: [
+        ["The 21 Irrefutable Laws of Leadership", "John C. Maxwell"],
+        ["The 5 Levels of Leadership", "John C. Maxwell"],
+        ["The Coaching Habit", "Michael Bungay Stanier"],
+        ["Crucial Conversations", "Patterson, Switzler, Grenny & McMillan"],
+        ["The Culture Code", "Daniel Coyle"],
+        ["Delivering Happiness", "Tony Hsieh"],
+        ["Drive", "Daniel H. Pink"],
+        ["Fierce Conversations", "Susan Scott"],
+        ["First, Break All the Rules", "Marcus Buckingham & Curt Coffman"],
+        ["The Five Dysfunctions of a Team", "Patrick M. Lencioni"],
+        ["Go Put Your Strengths to Work", "Marcus Buckingham"],
+        ["The Ideal Team Player", "Patrick M. Lencioni"],
+        ["Leadership Challenge", "James Kouzes & Barry Posner"],
+        ["Multipliers", "Liz Wiseman"],
+        ["Now, Discover Your Strengths", "Buckingham & Clifton"],
+        ["Our Iceberg Is Melting", "Kotter & Rathgeber"],
+        ["Oz Principles", "Connor, Smith & Hickman"],
+        ["The Power of Full Engagement", "Jim Loehr & Tony Schwartz"],
+        ["Powerful", "Patty McCord"],
+        ["Radical Candor", "Kim Scott"],
+        ["Strengths-Based Leadership", "Tom Rath & Barry Conchie"],
+        ["Topgrading", "Bradford D. Smart"],
+        ["Turn Your Ship Around", "David Marquet"],
+        ["What Got You Here Won't Get You There", "Goldsmith & Reiter"],
+        ["Who: The A Method for Hiring", "Geoff Smart & Randy Street"],
+        ["The Work of Leaders", "Straw, Scullard, Kukkonen & Davis"]
+      ]
+    },
+    estrategia: {
+      cardBg: '#EAF4FC', iconColor: '#2e7cc7', authorColor: '#4a7fa8',
+      books: [
+        ["Abundance", "Peter Diamandis & Steven Kotler"],
+        ["The Advantage", "Patrick M. Lencioni"],
+        ["Blue Ocean Strategy", "W. Chan Kim & Renée Mauborgne"],
+        ["Blueprint to a Billion", "David G. Thomson"],
+        ["The Brand Promise", "Duane Knapp"],
+        ["Built to Last", "Jim Collins & Jerry I. Porras"],
+        ["Business Model Canvas", "Alex Osterwalder & Yves Pigneur"],
+        ["Catalytic Mechanism", "Harvard Business Review"],
+        ["Competitive Advantage", "Michael E. Porter"],
+        ["Exponential Organizations", "Ismail, Malone & Van Geest"],
+        ["Good to Great", "Jim Collins"],
+        ["Good to Great to Gone", "Alan Wurtzel"],
+        ["Great by Choice", "Jim Collins & Morten T. Hansen"],
+        ["Hidden Champion of the 20th Century", "Hermann Simon"],
+        ["How Companies Win", "Rick Kash & David Calhoun"],
+        ["How the Mighty Fall", "Jim Collins"],
+        ["The Inside Advantage", "Robert Bloom & Dave Conti"],
+        ["The Lords of Strategy", "Walter Kiechel"],
+        ["Outthink the Competition", "Kaihan Krippendorf"],
+        ["The Sales Playbook", "Jack Daly & Dan Larson"],
+        ["Start with Why", "Simon Sinek"],
+        ["Turning the Flywheel", "Jim Collins"],
+        ["The Ultimate Question", "Reichheld & Markey"],
+        ["Uncommon Service", "Frances Frei & Anne Morriss"],
+        ["The Value Proposition", "Osterwalder, Pigneur & Bernarda"],
+        ["X-Factor", "Harvard Business Review"]
+      ]
+    },
+    ejecucion: {
+      cardBg: '#F1EAE0', iconColor: '#9C7A4E', authorColor: '#8a7360',
+      books: [
+        ["The 4 Disciplines of Execution", "McChesney, Covey & Huling"],
+        ["The 4 Hour Workweek", "Tim Ferriss"],
+        ["Balanced Scorecard", "Kaplan & Norton"],
+        ["Death by Meeting", "Patrick M. Lencioni"],
+        ["Execution Without the Drama", "Patrick Thean"],
+        ["Getting Things Done", "David Allen"],
+        ["The Goal", "Eliyahu M. Goldratt & Jeff Cox"],
+        ["Key Performance Indicators", "David Parmenter"],
+        ["Seven Habits of Highly Effective People", "Stephen Covey"],
+        ["Switch", "Chip Heath & Dan Heath"]
+      ]
+    },
+    caja: {
+      cardBg: '#EDF5E4', iconColor: '#7FB241', authorColor: '#5f8a34',
+      books: [
+        ["The Automatic Customer", "John Warrilow"],
+        ["Built to Sell", "John Warrilow"],
+        ["Cash Flow Story", "cashflowstory.com", "web"],
+        ["Confessions of a Pricing Man", "Hermann Simon"],
+        ["Financial Intelligence", "Berman, Knight & Case"],
+        ["Great Game of Business", "Jack Stack & Bo Burlingham"],
+        ["Keys to the Vault", "Keith J. Cunningham"],
+        ["Profit First", "Mike Michalowicz"],
+        ["Simple Numbers, Straight Talk, Big Profits!", "Crabtree & Harzog"],
+        ["A Stake in the Outcome", "Jack Stack & Bo Burlingham"],
+        ["Ultimate Blueprint", "Keith J. Cunningham"]
+      ]
+    }
+  };
+
+  Object.keys(data).forEach(function (key) {
+    var panel = document.getElementById('sl-panel-' + key);
+    var grid = panel.querySelector('.sl-grid');
+    var d = data[key];
+    d.books.forEach(function (book) {
+      var card = document.createElement('div');
+      card.className = 'sl-card';
+      card.style.background = d.cardBg;
+      var icon = book[2] === 'web' ? webIcon(d.iconColor) : bookIcon(d.iconColor);
+      card.innerHTML = icon +
+        '<div><p class="sl-title">' + book[0] + '</p>' +
+        '<p class="sl-author" style="color:' + d.authorColor + '">' + book[1] + '</p></div>';
+      grid.appendChild(card);
+    });
+  });
+
+  var tabs = document.querySelectorAll('#scaling-lecturas .sl-tab');
+  var activeColors = {
+    personas: '#E8A33D', estrategia: '#56ADE2', ejecucion: '#9C7A4E', caja: '#7FB241'
+  };
+  var inactiveColors = {
+    personas: '#EAF4FC', estrategia: '#EAF4FC', ejecucion: '#EAF4FC', caja: '#EAF4FC'
+  };
+  tabs.forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      var target = tab.getAttribute('data-pilar');
+      tabs.forEach(function (t) {
+        var p = t.getAttribute('data-pilar');
+        var isActive = p === target;
+        t.style.background = isActive ? activeColors[p] : '#F1EFE8';
+        t.style.color = isActive ? '#fff' : '#032948';
+        document.getElementById('sl-panel-' + p).style.display = isActive ? 'block' : 'none';
+      });
+    });
+  });
+})();
+</script>
