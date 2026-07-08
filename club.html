@@ -193,11 +193,6 @@
     flex-wrap: wrap;
   }
 
-  .fecha-tag {
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    color: var(--muted);
-  }
 
   .footer-right {
     display: flex;
@@ -206,27 +201,6 @@
   }
 
   /* ── Stars ── */
-  .stars-wrap {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-
-  .stars {
-    display: flex;
-    gap: 2px;
-  }
-
-  .star {
-    font-size: 16px;
-    cursor: pointer;
-    color: #D1D5DB;
-    transition: color 0.1s, transform 0.1s;
-    line-height: 1;
-    user-select: none;
-  }
-  .star.filled { color: var(--gold); }
-  .star:hover { transform: scale(1.2); }
 
   .avg-label {
     font-family: 'DM Mono', monospace;
@@ -274,127 +248,10 @@
     font-size: 14px;
   }
 
-  /* ── Nombre modal ── */
-  .modal-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.4);
-    z-index: 200;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-  }
-  .modal-overlay.visible { display: flex; }
 
-  .modal {
-    background: #fff;
-    border-radius: 16px;
-    padding: 28px 24px;
-    width: 100%;
-    max-width: 360px;
-    text-align: center;
-  }
-
-  .modal-title {
-    font-family: 'Nunito Sans', sans-serif; font-weight: 700;
-    font-size: 20px;
-    margin-bottom: 8px;
-    color: var(--text);
-  }
-
-  .modal-sub {
-    font-size: 13px;
-    color: var(--muted);
-    margin-bottom: 20px;
-    line-height: 1.5;
-  }
-
-  .modal-input {
-    width: 100%;
-    padding: 11px 14px;
-    border: 1px solid rgba(0,0,0,0.15);
-    border-radius: 10px;
-    font-size: 14px;
-    font-family: 'DM Sans', sans-serif;
-    outline: none;
-    margin-bottom: 14px;
-    transition: border-color 0.2s;
-  }
-  .modal-input:focus { border-color: var(--blue); }
-
-  .modal-btn {
-    width: 100%;
-    padding: 12px;
-    background: var(--navy);
-    color: #fff;
-    border: none;
-    border-radius: 10px;
-    font-size: 14px;
-    font-weight: 500;
-    font-family: 'DM Sans', sans-serif;
-    cursor: pointer;
-    transition: opacity 0.15s;
-  }
-  .modal-btn:hover { opacity: 0.9; }
-
-  .user-chip {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 12px;
-    background: #fff;
-    border-radius: 999px;
-    font-size: 12px;
-    color: var(--muted);
-    cursor: pointer;
-    border: 1px solid var(--border);
-  }
-  .user-chip-dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background: #1A7A4A;
-  }
-
-  .top-bar {
-    background: #fff;
-    padding: 12px 16px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .top-title {
-    font-family: 'Nunito Sans', sans-serif; font-weight: 700;
-    font-size: 18px;
-    color: var(--text);
-  }
-
-  @media (min-width: 600px) {
-    .top-bar { padding: 14px 24px; }
-  }
 </style>
 </head>
 <body>
-
-<!-- MODAL nombre -->
-<div class="modal-overlay visible" id="modal">
-  <div class="modal">
-    <div class="modal-title">¡Hola!</div>
-    <div class="modal-sub">Ingresa tu nombre para poder guardar tu valoración de cada lectura.</div>
-    <input class="modal-input" type="text" id="nombre-input" placeholder="Tu nombre…" maxlength="40">
-    <button class="modal-btn" onclick="guardarNombre()">Entrar al Club de Lectura</button>
-  </div>
-</div>
-
-<!-- TOP BAR -->
-<div class="top-bar" style="justify-content:flex-end">
-  <div class="user-chip" id="user-chip" onclick="cambiarNombre()" style="display:none">
-    <div class="user-chip-dot"></div>
-    <span id="user-chip-name"></span>
-  </div>
-</div>
 
 <!-- FILTERS -->
 <div class="filters">
@@ -411,33 +268,22 @@
 </div>
 
 <script>
-// ── CONFIGURACIÓN ──
-// Reemplaza esta URL con la de tu Google Sheet publicada como CSV
-// Formato: https://docs.google.com/spreadsheets/d/ID/gviz/tq?tqx=out:csv&sheet=Hoja1
-const SHEET_ID = '1N0Ntkggik3HgiFxj5FA1XnsP17mOBkrkat-CxpPabSY';
-const SHEET_CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Hoja1`;
-
 // ── DATOS DE LECTURAS ──
 const lecturas = [
-  { id: 1, sesion: 1, decision: 'Estrategia', nombre: 'What is Strategy', autor: 'Michael Porter, HBR', resumen: 'Estrategia bajada a actividades: fundamental para actividades diferenciadoras.', fecha: '18 de marzo', estado: 'Leído', pdf: 'https://scaling10x.sharepoint.com/:b:/s/Scaling/IQC6nGP29QNQT5Y7Nj3vFb91AS1ZLPbkPUJriIHvh7T-LQ8?e=SESmlf' },
-  { id: 2, sesion: 2, decision: 'Estrategia', nombre: "Building Your Company's Vision", autor: 'Jim Collins, HBR', resumen: 'Cómo construir valores y BHAG.', fecha: '28 de abril', estado: 'Leyendo', pdf: 'https://scaling10x.sharepoint.com/:b:/s/Scaling/IQAN6G_kwykKQq_afP2PixYaAU4vjtK4CF7VZu2kvZcj0jw?e=6Vffgt' },
-  { id: 3, sesion: 2, decision: 'Estrategia', nombre: 'Empieza por el por qué', autor: 'Simon Sinek', resumen: 'Propósito.', fecha: '28 de abril', estado: 'Leyendo', pdf: 'https://scaling10x.sharepoint.com/:b:/s/Scaling/IQB8M3V9ufMeRqGRQ7smtmAmATIr5jPjRxxgTHCmDwFWAac?e=x5zWn0' },
-  { id: 4, sesion: 2, decision: 'Estrategia', nombre: 'Valores fundamentales', autor: 'Forbes', resumen: 'Importancia valores fundamentales de una empresa.', fecha: '28 de abril', estado: 'Leyendo', pdf: 'https://scaling10x.sharepoint.com/:b:/s/Scaling/IQBkdsCjKWsXTZMtYq5x6Go9AcQbJmuSMmpfaxbtCQl_fEI?e=e4B6Kg' },
-  { id: 5, sesion: 3, decision: 'Estrategia', nombre: 'Good to Great', autor: 'Jim Collins', resumen: '13 ejemplos y muchas herramientas como Hedgehog concept y BHAG.', fecha: '26 de mayo', estado: 'Por leer', pdf: '' },
-  { id: 6, sesion: 4, decision: 'Estrategia', nombre: 'Jugar a Ganar: Cómo funciona realmente la estrategia', autor: 'AG Lafley', resumen: 'Estrategia para grandes corporaciones con unidades de negocios.', fecha: '30 de junio', estado: 'Por leer', pdf: '' },
-  { id: 7, sesion: 5, decision: 'Estrategia', nombre: 'Uncommon Service', autor: 'Frances Frei', resumen: 'Fundamental para Estrategia en una frase y promesa de marca: no se puede ser bueno en todo.', fecha: '28 de julio', estado: 'Por leer', pdf: '' },
-  { id: 8, sesion: 6, decision: 'Personas', nombre: 'The Advantage', autor: 'Patrick Lencioni', resumen: 'Explica cohesión de equipo y el rol de la estrategia (6 preguntas).', fecha: '25 de agosto', estado: 'Por leer', pdf: '' },
-  { id: 9, sesion: 7, decision: 'Personas', nombre: '5 Disfunciones de un Equipo', autor: 'Patrick Lencioni', resumen: 'Clave para la efectividad de equipo.', fecha: '29 de septiembre', estado: 'Por leer', pdf: '' },
-  { id: 10, sesion: 8, decision: 'Personas', nombre: 'Multipliers', autor: 'Liz Wiseman', resumen: 'Liderazgo multiplicador.', fecha: '27 de octubre', estado: 'Por leer', pdf: '' },
-  { id: 11, sesion: 9, decision: 'Estrategia', nombre: 'Turning the Flywheel', autor: 'Jim Collins', resumen: 'Profundiza el concepto de flywheel: cada empujón acelera el volante y con el tiempo el impulso se vuelve imparable.', fecha: '24 de noviembre', estado: 'Por leer', pdf: '' },
+  { id: 1, sesion: 1, decision: 'Estrategia', nombre: 'What is Strategy', autor: 'Michael Porter, HBR', resumen: 'Estrategia bajada a actividades: fundamental para actividades diferenciadoras.', estado: 'Leído', pdf: 'https://scaling10x.sharepoint.com/:b:/s/Scaling/IQC6nGP29QNQT5Y7Nj3vFb91AS1ZLPbkPUJriIHvh7T-LQ8?e=SESmlf' },
+  { id: 2, sesion: 2, decision: 'Estrategia', nombre: "Building Your Company's Vision", autor: 'Jim Collins, HBR', resumen: 'Cómo construir valores y BHAG.', estado: 'Leído', pdf: 'https://scaling10x.sharepoint.com/:b:/s/Scaling/IQAN6G_kwykKQq_afP2PixYaAU4vjtK4CF7VZu2kvZcj0jw?e=6Vffgt' },
+  { id: 3, sesion: 2, decision: 'Estrategia', nombre: 'Empieza por el por qué', autor: 'Simon Sinek', resumen: 'Propósito.', estado: 'Leído', pdf: 'https://scaling10x.sharepoint.com/:b:/s/Scaling/IQB8M3V9ufMeRqGRQ7smtmAmATIr5jPjRxxgTHCmDwFWAac?e=x5zWn0' },
+  { id: 4, sesion: 2, decision: 'Estrategia', nombre: 'Valores fundamentales', autor: 'Forbes', resumen: 'Importancia valores fundamentales de una empresa.', estado: 'Leído', pdf: 'https://scaling10x.sharepoint.com/:b:/s/Scaling/IQBkdsCjKWsXTZMtYq5x6Go9AcQbJmuSMmpfaxbtCQl_fEI?e=e4B6Kg' },
+  { id: 5, sesion: 3, decision: 'Estrategia', nombre: 'Good to Great', autor: 'Jim Collins', resumen: '13 ejemplos y muchas herramientas como Hedgehog concept y BHAG.', estado: 'Leído', pdf: '' },
+  { id: 6, sesion: 4, decision: 'Estrategia', nombre: 'Jugar a Ganar: Cómo funciona realmente la estrategia', autor: 'AG Lafley', resumen: 'Estrategia para grandes corporaciones con unidades de negocios.', estado: 'Leyendo', pdf: '' },
+  { id: 7, sesion: 5, decision: 'Estrategia', nombre: 'Uncommon Service', autor: 'Frances Frei', resumen: 'Fundamental para Estrategia en una frase y promesa de marca: no se puede ser bueno en todo.', estado: 'Por leer', pdf: '' },
+  { id: 8, sesion: 6, decision: 'Personas', nombre: 'The Advantage', autor: 'Patrick Lencioni', resumen: 'Explica cohesión de equipo y el rol de la estrategia (6 preguntas).', estado: 'Por leer', pdf: '' },
+  { id: 9, sesion: 7, decision: 'Personas', nombre: '5 Disfunciones de un Equipo', autor: 'Patrick Lencioni', resumen: 'Clave para la efectividad de equipo.', estado: 'Por leer', pdf: '' },
+  { id: 10, sesion: 8, decision: 'Personas', nombre: 'Multipliers', autor: 'Liz Wiseman', resumen: 'Liderazgo multiplicador.', estado: 'Por leer', pdf: '' },
+  { id: 11, sesion: 9, decision: 'Estrategia', nombre: 'Turning the Flywheel', autor: 'Jim Collins', resumen: 'Profundiza el concepto de flywheel: cada empujón acelera el volante y con el tiempo el impulso se vuelve imparable.', estado: 'Por leer', pdf: '' },
 ];
 
-// Solo mostrar las que tienen estado (Leído o Leyendo)
-const lecturasVisibles = lecturas;
-
 let currentFilter = 'Leído';
-let userName = localStorage.getItem('scaling_user') || '';
-let votaciones = {}; // { lectura_id: { promedio, totalVotos, miVoto } }
 
 const decisionMap = {
   'Estrategia': 'E',
@@ -446,85 +292,10 @@ const decisionMap = {
   'Caja': 'C'
 };
 
-// ── NOMBRE ──
-function guardarNombre() {
-  const input = document.getElementById('nombre-input').value.trim();
-  if (!input) return;
-  userName = input;
-  localStorage.setItem('scaling_user', userName);
-  document.getElementById('modal').classList.remove('visible');
-  document.getElementById('user-chip').style.display = 'flex';
-  document.getElementById('user-chip-name').textContent = userName;
-  cargarVotaciones();
-}
-
-function cambiarNombre() {
-  localStorage.removeItem('scaling_user');
-  userName = '';
-  document.getElementById('modal').classList.add('visible');
-  document.getElementById('user-chip').style.display = 'none';
-  document.getElementById('nombre-input').value = '';
-}
-
-document.getElementById('nombre-input').addEventListener('keydown', e => {
-  if (e.key === 'Enter') guardarNombre();
-});
-
-// ── VOTACIONES via Google Sheets ──
-async function cargarVotaciones() {
-  try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/valoraciones?select=*`, {
-      headers: {
-        'apikey': SUPABASE_KEY,
-        'Authorization': `Bearer ${SUPABASE_KEY}`
-      }
-    });
-    const data = await res.json();
-    const votos = {};
-    data.forEach(row => {
-      const id = parseInt(row.lectura_id);
-      const stars = parseInt(row.estrellas);
-      if (!id || !stars) return;
-      if (!votos[id]) votos[id] = { suma: 0, count: 0, miVoto: 0 };
-      votos[id].suma += stars;
-      votos[id].count += 1;
-      if (row.usuario === userName) votos[id].miVoto = stars;
-    });
-    Object.keys(votos).forEach(id => {
-      const v = votos[id];
-      votaciones[id] = {
-        promedio: v.count > 0 ? (v.suma / v.count).toFixed(1) : '—',
-        totalVotos: v.count,
-        miVoto: v.miVoto
-      };
-    });
-  } catch(e) {}
-  renderCards();
-}
-
-async function votar(lecturaId, estrellas) {
-  if (!userName) return;
-  const url = `https://docs.google.com/forms/d/e/REEMPLAZAR_FORM_ID/formResponse`;
-  // Usamos fetch a la sheet directamente via append
-  try {
-    await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/Hoja1:append?valueInputOption=USER_ENTERED`, {
-      method: 'POST',
-      body: JSON.stringify({ values: [[lecturaId, userName, estrellas, new Date().toISOString()]] })
-    });
-  } catch(e) {}
-
-  // Actualizar localmente
-  if (!votaciones[lecturaId]) votaciones[lecturaId] = { promedio: estrellas, totalVotos: 1, miVoto: estrellas };
-  else {
-    votaciones[lecturaId].miVoto = estrellas;
-  }
-  renderCard(lecturaId);
-}
-
 // ── RENDER ──
 function getVisible() {
-  if (currentFilter === 'all') return lecturasVisibles;
-  return lecturasVisibles.filter(l => l.estado === currentFilter);
+  if (currentFilter === 'all') return lecturas;
+  return lecturas.filter(l => l.estado === currentFilter);
 }
 
 function renderCards() {
@@ -537,22 +308,8 @@ function renderCards() {
   wrap.innerHTML = visible.map(l => cardHTML(l)).join('');
 }
 
-function renderCard(lecturaId) {
-  const card = document.querySelector(`[data-id="${lecturaId}"]`);
-  if (!card) return;
-  const l = lecturas.find(x => x.id === lecturaId);
-  if (!l) return;
-  card.outerHTML = cardHTML(l);
-}
-
 function cardHTML(l) {
   const cat = decisionMap[l.decision] || 'E';
-  const v = votaciones[l.id] || { promedio: '—', totalVotos: 0, miVoto: 0 };
-  const miVoto = v.miVoto || 0;
-
-  const estrellas = [1,2,3,4,5].map(n =>
-    `<span class="star ${n <= miVoto ? 'filled' : ''}" onclick="handleVoto(${l.id}, ${n})">★</span>`
-  ).join('');
 
   const pdfBtn = l.pdf
     ? `<a href="${l.pdf}" target="_blank" class="pdf-btn"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="1" y="1" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.2"/><path d="M4 6h4M6 4v4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg> Ver PDF</a>`
@@ -580,46 +337,11 @@ function cardHTML(l) {
       </div>
     </div>
     <div class="card-footer">
-      <span class="fecha-tag">Fecha Club de Lectura: ${l.fecha}</span>
       <div class="footer-right">
-        <div class="stars-wrap">
-          <div class="stars">${estrellas}</div>
-          <span class="avg-label">${v.promedio !== '—' ? v.promedio : '—'} ${v.totalVotos > 0 ? '(' + v.totalVotos + ')' : ''}</span>
-        </div>
         ${pdfBtn}
       </div>
     </div>
   </div>`;
-}
-
-function handleVoto(lecturaId, estrellas) {
-  if (!userName) {
-    document.getElementById('modal').classList.add('visible');
-    return;
-  }
-  // Actualizar UI inmediatamente
-  if (!votaciones[lecturaId]) votaciones[lecturaId] = { promedio: estrellas, totalVotos: 1, miVoto: estrellas };
-  else votaciones[lecturaId].miVoto = estrellas;
-
-  // Guardar en sheet
-  guardarVotoSheet(lecturaId, estrellas);
-  renderCards();
-}
-
-async function guardarVotoSheet(lecturaId, estrellas) {
-  const fecha = new Date().toLocaleDateString('es-CL');
-  try {
-    await fetch(`${SUPABASE_URL}/rest/v1/valoraciones`, {
-      method: 'POST',
-      headers: {
-        'apikey': SUPABASE_KEY,
-        'Authorization': `Bearer ${SUPABASE_KEY}`,
-        'Content-Type': 'application/json',
-        'Prefer': 'return=minimal'
-      },
-      body: JSON.stringify({ lectura_id: lecturaId, usuario: userName, estrellas, fecha })
-    });
-  } catch(e) {}
 }
 
 function filtrar(estado, el) {
@@ -634,14 +356,7 @@ function filtrar(estado, el) {
 }
 
 // ── INIT ──
-if (userName) {
-  document.getElementById('modal').classList.remove('visible');
-  document.getElementById('user-chip').style.display = 'flex';
-  document.getElementById('user-chip-name').textContent = userName;
-  cargarVotaciones();
-} else {
-  renderCards();
-}
+renderCards();
 </script>
 </body>
 </html>
