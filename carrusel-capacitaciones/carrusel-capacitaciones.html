@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Capacitaciones online – Scaling</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Franklin Gothic Demi', 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+      background: #f0f4f8;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      padding: 24px 12px;
+    }
+
+    .carousel-wrapper {
+      width: 100%;
+      max-width: 700px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      padding: 0 4px;
+    }
+    .section-header .bar {
+      width: 5px;
+      height: 36px;
+      background: #56ADE2;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+    .section-header h2 {
+      font-family: 'Franklin Gothic Demi', 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #032948;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .carousel {
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(3, 41, 72, 0.18);
+      background: #032948;
+      aspect-ratio: 1587 / 2245;
+      width: 100%;
+      user-select: none;
+    }
+
+    .carousel-track {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .slide {
+      flex: 0 0 100%;
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+
+    .slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+    }
+
+    .arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 10;
+      background: rgba(3, 41, 72, 0.55);
+      border: 2px solid rgba(86, 173, 226, 0.6);
+      color: #ffffff;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, border-color 0.2s, transform 0.15s;
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+    .arrow:hover, .arrow:focus-visible {
+      background: rgba(86, 173, 226, 0.85);
+      border-color: #56ADE2;
+      outline: none;
+      transform: translateY(-50%) scale(1.08);
+    }
+    .arrow svg { width: 20px; height: 20px; fill: none; stroke: #fff; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+    .arrow-prev { left: 14px; }
+    .arrow-next { right: 14px; }
+
+    .dots {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      margin-top: 16px;
+      padding: 4px 0;
+    }
+    .dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #b0c8dc;
+      border: none;
+      cursor: pointer;
+      transition: background 0.25s, transform 0.25s;
+      padding: 0;
+    }
+    .dot.active {
+      background: #56ADE2;
+      transform: scale(1.35);
+    }
+    .dot:hover { background: #032948; }
+
+    .counter {
+      text-align: center;
+      margin-top: 8px;
+      font-family: 'Franklin Gothic Book', 'Franklin Gothic Medium', Arial, sans-serif;
+      font-size: 0.78rem;
+      color: #5a7a96;
+      letter-spacing: 0.06em;
+    }
+
+    @media (max-width: 400px) {
+      .arrow { width: 36px; height: 36px; }
+      .arrow svg { width: 16px; height: 16px; }
+      .arrow-prev { left: 8px; }
+      .arrow-next { right: 8px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="carousel-wrapper" role="region" aria-label="Capacitaciones online Scaling" aria-roledescription="carrusel">
+
+  <div class="section-header">
+    <div class="bar"></div>
+    <h2>Capacitaciones online</h2>
+  </div>
+
+  <div class="carousel" id="carousel" tabindex="0" aria-live="polite">
+
+    <button class="arrow arrow-prev" id="prevBtn" aria-label="Slide anterior">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+
+    <div class="carousel-track" id="track">
+
+      <div class="slide" role="group" aria-roledescription="slide" aria-label="1 de 2: Scaling Up 3.0 – Verne Harnish">
+        <img src="curso-1-scaling-up.jpg" alt="Scaling Up 3.0 de Verne Harnish – Curso central de la metodología" />
+      </div>
+
+      <div class="slide" role="group" aria-roledescription="slide" aria-label="2 de 2: Financial Mastery – Joss Milner">
+        <img src="curso-2-financial-mastery.jpg" alt="Financial Mastery de Joss Milner – Fundamentos financieros para escalar" />
+      </div>
+
+    </div>
+
+    <button class="arrow arrow-next" id="nextBtn" aria-label="Slide siguiente">
+      <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+
+  </div>
+
+  <div class="dots" id="dots" role="tablist" aria-label="Seleccionar slide"></div>
+  <p class="counter" id="counter" aria-live="polite" aria-atomic="true">1 / 2</p>
+
+</div>
+
+<script>
+  (function () {
+    const track     = document.getElementById('track');
+    const prevBtn   = document.getElementById('prevBtn');
+    const nextBtn   = document.getElementById('nextBtn');
+    const dotsEl    = document.getElementById('dots');
+    const counterEl = document.getElementById('counter');
+    const carousel  = document.getElementById('carousel');
+
+    const slides  = track.querySelectorAll('.slide');
+    const total   = slides.length;
+    let current   = 0;
+    let timer     = null;
+    const INTERVAL = 4800;
+
+    const dots = [];
+    slides.forEach(function (_, i) {
+      const btn = document.createElement('button');
+      btn.className = 'dot' + (i === 0 ? ' active' : '');
+      btn.setAttribute('role', 'tab');
+      btn.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
+      btn.setAttribute('aria-label', 'Slide ' + (i + 1));
+      btn.addEventListener('click', function () { goTo(i); resetTimer(); });
+      dotsEl.appendChild(btn);
+      dots.push(btn);
+    });
+
+    function goTo(index) {
+      slides[current].removeAttribute('aria-current');
+      dots[current].classList.remove('active');
+      dots[current].setAttribute('aria-selected', 'false');
+      current = (index + total) % total;
+      track.style.transform = 'translateX(-' + (current * 100) + '%)';
+      slides[current].setAttribute('aria-current', 'true');
+      dots[current].classList.add('active');
+      dots[current].setAttribute('aria-selected', 'true');
+      counterEl.textContent = (current + 1) + ' / ' + total;
+    }
+
+    function startTimer() { timer = setInterval(function () { goTo(current + 1); }, INTERVAL); }
+    function stopTimer()  { clearInterval(timer); }
+    function resetTimer() { stopTimer(); startTimer(); }
+
+    prevBtn.addEventListener('click', function () { goTo(current - 1); resetTimer(); });
+    nextBtn.addEventListener('click', function () { goTo(current + 1); resetTimer(); });
+
+    carousel.addEventListener('mouseenter', stopTimer);
+    carousel.addEventListener('mouseleave', startTimer);
+    carousel.addEventListener('focusin',    stopTimer);
+    carousel.addEventListener('focusout',   startTimer);
+
+    carousel.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowLeft')  { goTo(current - 1); resetTimer(); e.preventDefault(); }
+      if (e.key === 'ArrowRight') { goTo(current + 1); resetTimer(); e.preventDefault(); }
+    });
+
+    let touchStartX = null;
+    carousel.addEventListener('touchstart', function (e) { touchStartX = e.changedTouches[0].clientX; }, { passive: true });
+    carousel.addEventListener('touchend',   function (e) {
+      if (touchStartX === null) return;
+      const dx = e.changedTouches[0].clientX - touchStartX;
+      if (Math.abs(dx) > 40) { goTo(dx < 0 ? current + 1 : current - 1); resetTimer(); }
+      touchStartX = null;
+    }, { passive: true });
+
+    goTo(0);
+    startTimer();
+  })();
+</script>
+
+</body>
+</html>
